@@ -1,9 +1,9 @@
 [@@@ocaml.warning "-44-48"]
 
-let re = Tyre.compile (Tyre.list RFC2616.request)
+let re = Tyre.compile (Tyre.rep RFC2616.request)
 let tyre s =
   match Tyre.exec re s with
-  | Result.Ok l -> assert (List.length l = 55 * 100)
+  | Result.Ok l -> assert (Gen.length l = 55 * 100)
   | Result.Error _ -> failwith "oups"
 
 let tyre_test s =
@@ -11,8 +11,8 @@ let tyre_test s =
 
 let re2 = Tyre.compile ~whole:false RFC2616.request
 let tyre_all s =
-  match Tyre.all re2 s with
-  | Result.Ok l -> assert (List.length l = 55 * 100)
+  match Tyre.all_gen re2 s with
+  | Result.Ok l -> assert (Gen.length l = 55 * 100)
   | Result.Error _ -> failwith "oups"
 
 let angstrom s =

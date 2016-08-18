@@ -55,11 +55,11 @@ let request =
   let of_ (meth, uri, version, headers) = (((meth, uri), version), headers) in
   conv ~name:"request" to_ of_ @@ seq
     (request_first_line   <* eol)
-    (list (header <* eol) <* eol)
+    (rep (header <* eol) <* eol)
 
 let response =
   let to_ (((version, status), msg), headers) = Some (version, status, msg, headers) in
   let of_ (version, status, msg, headers) = (((version, status), msg), headers) in
   conv ~name:"response" to_ of_ @@ seq
     (response_first_line  <* eol)
-    (list (header <* eol) <* eol)
+    (rep (header <* eol) <* eol)
