@@ -185,6 +185,10 @@ val exec : ?pos:int -> ?len:int -> 'a re -> string -> ('a, 'a error) Result.resu
     @param len length of the substring of [str] that can be matched (default to the end of the string)
 *)
 
+val all : ?pos:int -> ?len:int -> 'a re -> string -> ('a list, 'a error) Result.result
+
+val all_gen : ?pos:int -> ?len:int -> 'a re -> string -> ('a gen, 'a error) Result.result
+
 (** {3:routing Routing} *)
 
 type +'a route = Route : 'x t * ('x -> 'a) -> 'a route

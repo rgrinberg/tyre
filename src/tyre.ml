@@ -368,18 +368,34 @@ type 'a error = [
   | `ConverterFailure of string * string
 ]
 
+let extract_with_info ~info ~original subs = match info with
+  | One w -> extract_top ~original w subs
+  | Routes wl -> extract_route_top ~original wl subs
+
 let exec ?pos ?len ({ info ; cre } as tcre) original =
   match Re.exec_opt ?pos ?len cre original with
   | None -> Result.Error (`NoMatch (tcre, original))
   | Some subs ->
-    let f = match info with
-      | One wit -> extract_top ~original wit
-      | Routes wl -> extract_route_top ~original wl
-    in
     try
-      Result.Ok (f subs)
+      Result.Ok (extract_with_info ~info ~original subs)
     with ConverterFailure (name, s) ->
       Result.Error (`ConverterFailure (name, s))
+
+let all_gen ?pos ?len ({ info ; cre } as tcre) original =
+  try
+    let gen = Re.all_gen ?pos ?len cre original in
+    let get_res subs = extract_with_info ~info ~original subs in
+    Result.Ok (Gen.map get_res gen)
+  with
+  | ConverterFailure (name, s) ->
+    Result.Error (`ConverterFailure (name, s))
+  | Not_found ->
+    Result.Error (`NoMatch (tcre, original))
+
+let all ?pos ?len tcre original =
+  match all_gen ?pos ?len tcre original with
+  | Result.Ok x -> Result.Ok (Gen.to_list x)
+  | Result.Error _ as r -> r
 
 (** Pretty printers *)
 
