@@ -18,7 +18,7 @@ end
 let take_till re = regex @@ Re.(rep @@ compl [re])
 
 let token = regex P.token
-let digits = pos_int
+let digits = regex @@ Re.(rep1 digit)
 let spaces = regex @@ Re.rep P.space
 
 let lex p = p <** (spaces, "")
