@@ -381,6 +381,9 @@ let exec ?pos ?len ({ info ; cre } as tcre) original =
     with ConverterFailure (name, s) ->
       Result.Error (`ConverterFailure (name, s))
 
+let execp ?pos ?len {cre ; _ } original =
+  Re.execp ?pos ?len cre original
+
 let all_gen ?pos ?len ({ info ; cre } as tcre) original =
   try
     let gen = Re.all_gen ?pos ?len cre original in

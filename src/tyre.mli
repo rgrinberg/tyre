@@ -185,6 +185,8 @@ val exec : ?pos:int -> ?len:int -> 'a re -> string -> ('a, 'a error) Result.resu
     @param len length of the substring of [str] that can be matched (default to the end of the string)
 *)
 
+val execp :  ?pos:int -> ?len:int -> 'a re -> string -> bool
+
 val all : ?pos:int -> ?len:int -> 'a re -> string -> ('a list, 'a error) Result.result
 
 val all_gen : ?pos:int -> ?len:int -> 'a re -> string -> ('a gen, 'a error) Result.result
