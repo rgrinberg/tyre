@@ -165,6 +165,31 @@ let separated_list ~sep e =
   in
   conv "separated list" to_ from_ e
 
+module Tuple = struct
+
+  let conv2 x = x
+
+  let conv3 x =
+    conv ~name:"tuple 3"
+      (fun ((a, b), c) -> Some (a, b, c))
+      (fun (a, b, c) -> ((a, b), c))
+      x
+
+  let conv4 x =
+    conv ~name:"tuple 4"
+      (fun (((a, b), c), d) -> Some (a, b, c, d))
+      (fun (a, b, c, d) -> (((a, b), c),d))
+      x
+
+  let re2 ~sep x = (x <** sep) <*> x
+  let re3 ~sep x =
+    let (<.>) x y = (x <** sep) <*> y in
+    conv3 (x <.> x <.> x)
+  let re4 ~sep x =
+    let (<.>) x y = (x <** sep) <*> y in
+    conv4 (x <.> x <.> x <.> x)
+end
+
 (** {2 Evaluation functions} *)
 
 (** Evaluation is the act of filling the holes. *)
